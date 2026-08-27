@@ -3,174 +3,452 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BukanPASUM 26/27 Confessions</title>
+  <title>BukanPASUM 26/27 — Confessions Archive</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
+    :root {
+      --bg: #0d0d11;
+      --card-bg: #14141b;
+      --card-border: #22222e;
+      --card-hover: #2d2d3d;
+      --text: #e2e2e8;
+      --text-muted: #8a8a99;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --accent-glow: rgba(108, 92, 231, 0.15);
+      --divider: #262636;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0f0f12;
-      color: #e0e0e0;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     
-    .header {
-      background: linear-gradient(180deg, #181824 0%, #0f0f12 100%);
-      padding: 40px 20px 30px;
-      text-align: center;
-      border-bottom: 1px solid #232332;
+    /* Header */
+    header {
+      background: rgba(20, 20, 27, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 24px;
     }
     
-    .header h1 {
-      font-size: 26px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
-    }
-    
-    .header p {
-      color: #8e8ea0;
-      font-size: 14px;
-    }
-    
-    .header .submit-btn {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 10px 22px;
-      background: #6c5ce7;
-      color: white;
-      text-decoration: none;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(108, 92, 231, 0.35);
-    }
-    
-    .header .submit-btn:hover {
-      background: #5a4bd1;
-      transform: translateY(-1px);
-    }
-    
-    .container {
-      max-width: 580px;
+    .header-inner {
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 24px 16px;
-    }
-    
-    .confession-card {
-      background: #16161e;
-      border: 1px solid #262636;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    }
-    
-    .meta-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
     }
     
-    .confession-no {
-      font-size: 15px;
+    .logo-area h1 {
+      font-size: 18px;
       font-weight: 700;
-      color: #ffffff;
+      color: #fff;
+      letter-spacing: -0.3px;
     }
     
-    .category-tag {
+    .logo-area p {
       font-size: 12px;
-      font-weight: 600;
-      color: #a29bfe;
-      background: rgba(108, 92, 231, 0.15);
-      padding: 3px 8px;
-      border-radius: 6px;
+      color: var(--text-muted);
     }
     
-    .author-line {
+    .submit-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
       font-size: 13px;
-      color: #9e9eb3;
-      font-style: italic;
-      margin-bottom: 4px;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
     
-    .reply-line {
+    .submit-cta:hover {
+      background: #5b4bc4;
+      transform: translateY(-1px);
+    }
+    
+    /* Main Layout Grid */
+    .app-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      padding: 32px 20px 60px;
+      flex: 1;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 90px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .sidebar-widget {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .widget-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    /* Search Box */
+    .search-input {
+      width: 100%;
+      background: #09090c;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .stat-item {
+      background: #09090c;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-light);
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    
+    /* Category/Tag List */
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .category-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+    
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+    
+    .category-btn.active {
+      background: var(--accent-glow);
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+    
+    .cat-badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #09090c;
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+    }
+    
+    .category-btn.active .cat-badge {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    
+    /* Feed Area */
+    .feed-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .filter-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--accent-glow);
+      border: 1px solid rgba(108, 92, 231, 0.3);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--accent-light);
+    }
+    
+    .clear-filter-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    /* Confession Card matching Option 5 Aesthetic */
+    .confession-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    
+    .confession-card:hover {
+      border-color: var(--card-hover);
+    }
+    
+    .meta-line {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .meta-num {
+      color: #fff;
+      font-weight: 600;
+    }
+    
+    .meta-tag {
+      color: var(--accent-light);
+      background: var(--accent-glow);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    
+    .meta-author {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    
+    .meta-reply {
       font-size: 12px;
       color: #74b9ff;
-      font-style: italic;
       margin-bottom: 10px;
     }
     
-    blockquote {
-      background: rgba(255, 255, 255, 0.03);
-      border-left: 3px solid #6c5ce7;
-      margin: 12px 0 16px 0;
-      padding: 10px 14px;
+    .confession-body {
       font-size: 14.5px;
-      line-height: 1.6;
-      color: #dddddd;
+      line-height: 1.65;
+      color: #dedee6;
       white-space: pre-wrap;
       word-wrap: break-word;
-      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
     }
     
-    .divider {
+    .card-divider {
       text-align: center;
-      color: #353545;
+      color: #3e3e52;
       font-size: 13px;
       letter-spacing: 6px;
+      margin-top: 14px;
     }
     
-    .loading, .error {
+    .loading, .empty-state {
       text-align: center;
-      padding: 50px 20px;
-      color: #7a7a8c;
+      padding: 60px 20px;
+      color: var(--text-muted);
       font-size: 14px;
     }
     
-    .footer {
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 24px;
       text-align: center;
-      padding: 30px 20px 40px;
-      color: #555566;
       font-size: 12px;
+      color: var(--text-muted);
     }
     
-    .footer a {
-      color: #8e8ea0;
+    footer a {
+      color: var(--accent-light);
       text-decoration: none;
     }
-    
-    .footer a:hover {
-      color: #a29bfe;
+
+    /* Responsive Design */
+    @media (max-width: 850px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding-top: 16px;
+      }
+      
+      .sidebar {
+        position: static;
+      }
+      
+      .category-list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        gap: 6px;
+      }
+      
+      .category-btn {
+        flex-shrink: 0;
+        width: auto;
+        padding: 6px 12px;
+        background: #09090c;
+        border: 1px solid var(--card-border);
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>🤫 BukanPASUM 26/27</h1>
-    <p>Anonymous Confessions Channel</p>
-    <a href="https://tally.so/r/PdydpQ" class="submit-btn" target="_blank">✍️ Submit Confession</a>
+  <header>
+    <div class="header-inner">
+      <div class="logo-area">
+        <h1>🤫 BukanPASUM 26/27</h1>
+        <p>Live Anonymous Confessions</p>
+      </div>
+      <a href="https://tally.so/r/PdydpQ" class="submit-cta" target="_blank">
+        ✍️ Confess
+      </a>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      
+      <!-- Search Input -->
+      <div class="sidebar-widget">
+        <input 
+          type="text" 
+          id="search-input" 
+          class="search-input" 
+          placeholder="🔍 Search confessions..." 
+          oninput="handleSearch(this.value)"
+        >
+      </div>
+
+      <!-- Live Stats -->
+      <div class="sidebar-widget">
+        <div class="widget-title">Live Statistics</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Confessions</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-authors">0</div>
+            <div class="stat-label">Unique Names</div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 11.5px; color: var(--text-muted); text-align: center;">
+          Trending: <span id="stat-top-cat" style="color: #fff; font-weight: 600;">—</span>
+        </div>
+      </div>
+
+      <!-- Category Grouping -->
+      <div class="sidebar-widget">
+        <div class="widget-title">Categories</div>
+        <div class="category-list" id="category-list">
+          <button class="category-btn active" onclick="filterCategory('ALL')">
+            <span>🌐 All Confessions</span>
+            <span class="cat-badge" id="badge-ALL">0</span>
+          </button>
+          <!-- Category buttons dynamically inserted here -->
+        </div>
+      </div>
+
+      <!-- Links Widget -->
+      <div class="sidebar-widget" style="font-size: 12px; color: var(--text-muted);">
+        <p>Official Channel: <a href="https://t.me/bukanpasumconfess" target="_blank" style="color: var(--accent-light);">@bukanpasumconfess</a></p>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT FEED AREA -->
+    <main class="feed-container">
+      <div id="filter-banner" class="filter-banner" style="display: none;">
+        <span id="filter-banner-text">Showing: #Academic</span>
+        <button class="clear-filter-btn" onclick="filterCategory('ALL')">Clear filter</button>
+      </div>
+
+      <div id="confessions-container">
+        <div class="loading">Loading latest confessions from database...</div>
+      </div>
+    </main>
+
   </div>
-  
-  <div class="container" id="confessions-container">
-    <div class="loading">Loading latest confessions...</div>
-  </div>
-  
-  <div class="footer">
-    <p><a href="https://t.me/bukanpasumconfess" target="_blank">Telegram Channel</a> · <a href="https://tally.so/r/PdydpQ" target="_blank">Submit</a></p>
-  </div>
+
+  <footer>
+    <p>BukanPASUM 26/27 · Unofficial Student Confessions Archive · <a href="https://tally.so/r/PdydpQ" target="_blank">Submit Yours</a></p>
+  </footer>
 
   <script>
     // ============================================
     // CONFIGURATION
     // ============================================
-    // Paste your Google Apps Script Web App URL here:
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNGcn87ezyxYLxD-AupmsoKBZGQz7nfU9gC_VZZid75tWFOAdPgfTFlIH54qZrYIU/exec";
-    
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Web App URL
+    const TALLY_URL = "https://tally.so/r/PdydpQ";
+
     const CATEGORY_HASHTAGS = {
       "Academic": "#Academic",
       "Love & Crush": "#LoveCrush",
@@ -182,6 +460,10 @@
       "Deep & Serious": "#DeepSerious"
     };
 
+    let allConfessions = [];
+    let activeCategory = "ALL";
+    let searchQuery = "";
+
     function escapeHtml(text) {
       if (!text) return "";
       return text
@@ -190,64 +472,173 @@
         .replace(/>/g, "&gt;");
     }
 
-    async function loadConfessions() {
+    async function loadData() {
       const container = document.getElementById('confessions-container');
-      
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getConfessions`);
         const data = await response.json();
-        
+
         if (!Array.isArray(data) || data.length === 0) {
-          container.innerHTML = '<div class="loading">No confessions posted yet!</div>';
+          container.innerHTML = '<div class="empty-state">No confessions published yet.</div>';
           return;
         }
-        
-        container.innerHTML = '';
-        
-        data.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'confession-card';
-          
-          let tagText = item.category ? (CATEGORY_HASHTAGS[item.category.trim()] || `#${item.category.replace(/\\s+/g, '')}`) : '';
-          
-          let html = `
-            <div class="meta-line">
-              <span class="confession-no">— confession no. ${escapeHtml(item.number)}</span>
-              ${tagText ? `<span class="category-tag">${escapeHtml(tagText)}</span>` : ''}
-            </div>
-          `;
-          
-          if (item.username && item.username.trim() !== '') {
-            html += `<div class="author-line">✍️ by ${escapeHtml(item.username.trim())}</div>`;
-          }
-          
-          if (item.replyTo && item.replyTo.trim() !== '') {
-            let cleanReply = item.replyTo.trim().replace(/^#\\s*/, '');
-            if (/^\\d+$/.test(cleanReply)) cleanReply = '#' + cleanReply;
-            html += `<div class="reply-line">↳ in reply to ${escapeHtml(cleanReply)}</div>`;
-          }
-          
-          html += `
-            <blockquote>${escapeHtml(item.confession)}</blockquote>
-            <div class="divider">·  ·  ·</div>
-          `;
-          
-          card.innerHTML = html;
-          container.appendChild(card);
-        });
-        
+
+        allConfessions = data;
+        buildSidebarCategories();
+        updateStats();
+        renderFeed();
+
       } catch (err) {
-        console.error("Fetch error:", err);
+        console.error(err);
         container.innerHTML = `
-          <div class="error">
-            <p>Unable to load confessions from database.</p>
-            <p style="margin-top: 10px;"><a href="https://t.me/s/bukanpasumconfess" style="color:#a29bfe;">View on Telegram instead →</a></p>
+          <div class="empty-state">
+            <p>Unable to load confessions.</p>
+            <p style="margin-top: 8px;"><a href="https://t.me/bukanpasumconfess" style="color: var(--accent-light);">View live on Telegram →</a></p>
           </div>
         `;
       }
     }
-    
-    loadConfessions();
+
+    function buildSidebarCategories() {
+      const catListContainer = document.getElementById('category-list');
+      const counts = { "ALL": allConfessions.length };
+
+      // Calculate counts per category
+      Object.keys(CATEGORY_HASHTAGS).forEach(cat => counts[cat] = 0);
+      
+      allConfessions.forEach(item => {
+        const cat = item.category ? item.category.trim() : null;
+        if (cat && counts[cat] !== undefined) {
+          counts[cat]++;
+        }
+      });
+
+      document.getElementById('badge-ALL').innerText = counts["ALL"];
+
+      // Render buttons
+      let buttonsHtml = `
+        <button class="category-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
+          <span>🌐 All</span>
+          <span class="cat-badge">${counts["ALL"]}</span>
+        </button>
+      `;
+
+      Object.keys(CATEGORY_HASHTAGS).forEach(cat => {
+        const tag = CATEGORY_HASHTAGS[cat];
+        const isActive = activeCategory === cat ? 'active' : '';
+        buttonsHtml += `
+          <button class="category-btn ${isActive}" onclick="filterCategory('${escapeHtml(cat)}')">
+            <span>${tag}</span>
+            <span class="cat-badge">${counts[cat] || 0}</span>
+          </button>
+        `;
+      });
+
+      catListContainer.innerHTML = buttonsHtml;
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').innerText = allConfessions.length;
+      
+      // Count unique usernames
+      const authors = new Set();
+      const catCounts = {};
+
+      allConfessions.forEach(item => {
+        if (item.username && item.username.trim()) {
+          authors.add(item.username.trim().toLowerCase());
+        }
+        if (item.category && item.category.trim()) {
+          const c = item.category.trim();
+          catCounts[c] = (catCounts[c] || 0) + 1;
+        }
+      });
+
+      document.getElementById('stat-authors').innerText = authors.size;
+
+      // Find top category
+      let topCat = "—";
+      let topCount = 0;
+      Object.keys(catCounts).forEach(c => {
+        if (catCounts[c] > topCount) {
+          topCount = catCounts[c];
+          topCat = CATEGORY_HASHTAGS[c] || c;
+        }
+      });
+
+      document.getElementById('stat-top-cat').innerText = topCat;
+    }
+
+    function filterCategory(cat) {
+      activeCategory = cat;
+      buildSidebarCategories();
+      
+      const banner = document.getElementById('filter-banner');
+      const bannerText = document.getElementById('filter-banner-text');
+      
+      if (cat === "ALL") {
+        banner.style.display = 'none';
+      } else {
+        banner.style.display = 'flex';
+        bannerText.innerText = `Filtered by ${CATEGORY_HASHTAGS[cat] || cat}`;
+      }
+
+      renderFeed();
+    }
+
+    function handleSearch(query) {
+      searchQuery = query.toLowerCase().trim();
+      renderFeed();
+    }
+
+    function renderFeed() {
+      const container = document.getElementById('confessions-container');
+      
+      const filtered = allConfessions.filter(item => {
+        // Category Filter
+        const matchesCategory = (activeCategory === "ALL") || 
+          (item.category && item.category.trim() === activeCategory);
+
+        // Search Query
+        const matchesSearch = !searchQuery || 
+          (item.confession && item.confession.toLowerCase().includes(searchQuery)) ||
+          (item.username && item.username.toLowerCase().includes(searchQuery)) ||
+          (item.number && item.number.toString().includes(searchQuery));
+
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No confessions match your filter or search query.</div>';
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(item => {
+        const tag = item.category ? (CATEGORY_HASHTAGS[item.category.trim()] || `#${item.category.replace(/\\s+/g, '')}`) : '';
+        
+        html += `
+          <article class="confession-card">
+            <div class="meta-line">
+              <span class="meta-num">— confession no. ${escapeHtml(item.number)}</span>
+              ${tag ? `<span class="meta-tag">${escapeHtml(tag)}</span>` : ''}
+            </div>
+            
+            ${item.username && item.username.trim() ? `<div class="meta-author">— by ${escapeHtml(item.username.trim())}</div>` : ''}
+            
+            ${item.replyTo && item.replyTo.trim() ? `<div class="meta-reply">— in reply to ${escapeHtml(item.replyTo.trim())}</div>` : ''}
+            
+            <div class="confession-body">${escapeHtml(item.confession)}</div>
+            
+            <div class="card-divider">·  ·  ·</div>
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    loadData();
   </script>
 </body>
 </html>
