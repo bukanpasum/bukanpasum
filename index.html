@@ -2,22 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BukanPASUM 26/27 — Confessions Archive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BukanPASUM 26/27 — Confessions</title>
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
     :root {
-      --bg: #0d0d11;
-      --card-bg: #14141b;
-      --card-border: #22222e;
-      --card-hover: #2d2d3d;
-      --text: #e2e2e8;
-      --text-muted: #8a8a99;
+      --bg: #0b0b0e;
+      --surface: #13131a;
+      --surface-border: #21212c;
+      --surface-hover: #1c1c26;
+      --text: #e1e1e6;
+      --text-muted: #828292;
       --accent: #6c5ce7;
       --accent-light: #a29bfe;
       --accent-glow: rgba(108, 92, 231, 0.15);
-      --divider: #262636;
+      --danger: #ff7675;
+      --card-divider: #262636;
     }
     
     body {
@@ -28,12 +30,16 @@
       display: flex;
       flex-direction: column;
     }
+
+    /* =======================================================
+       DESKTOP & UNIVERSAL STYLES
+       ======================================================= */
     
     /* Header */
     header {
-      background: rgba(20, 20, 27, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--card-border);
+      background: rgba(19, 19, 26, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--surface-border);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -48,23 +54,23 @@
       align-items: center;
     }
     
-    .logo-area h1 {
+    .brand h1 {
       font-size: 18px;
       font-weight: 700;
       color: #fff;
       letter-spacing: -0.3px;
     }
     
-    .logo-area p {
+    .brand p {
       font-size: 12px;
       color: var(--text-muted);
     }
     
-    .submit-cta {
+    .btn-header {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
+      padding: 8px 18px;
       background: var(--accent);
       color: #fff;
       text-decoration: none;
@@ -74,57 +80,54 @@
       transition: all 0.2s ease;
     }
     
-    .submit-cta:hover {
+    .btn-header:hover {
       background: #5b4bc4;
       transform: translateY(-1px);
     }
     
-    /* Main Layout Grid */
-    .app-layout {
+    /* Grid Layout */
+    .app-container {
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 290px 1fr;
       gap: 32px;
       padding: 32px 20px 60px;
       flex: 1;
     }
     
-    /* Sidebar */
-    .sidebar {
+    /* Desktop Sidebar */
+    .desktop-sidebar {
       position: sticky;
-      top: 90px;
+      top: 85px;
       height: fit-content;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
     
-    .sidebar-widget {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+    .widget {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
       border-radius: 12px;
       padding: 16px;
     }
     
     .widget-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--text-muted);
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
     
     /* Search Box */
     .search-input {
       width: 100%;
       background: #09090c;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--surface-border);
       border-radius: 8px;
       padding: 10px 12px;
       color: #fff;
@@ -137,41 +140,41 @@
       border-color: var(--accent);
     }
     
-    /* Stats Grid */
+    /* Stats Widget */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     
-    .stat-item {
+    .stat-box {
       background: #09090c;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--surface-border);
       border-radius: 8px;
       padding: 10px;
       text-align: center;
     }
     
-    .stat-value {
-      font-size: 18px;
+    .stat-number {
+      font-size: 17px;
       font-weight: 700;
       color: var(--accent-light);
     }
     
-    .stat-label {
-      font-size: 11px;
+    .stat-desc {
+      font-size: 10.5px;
       color: var(--text-muted);
       margin-top: 2px;
     }
     
-    /* Category/Tag List */
-    .category-list {
+    /* Category List (Desktop) */
+    .desktop-category-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     
-    .category-btn {
+    .cat-item-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -187,40 +190,40 @@
       width: 100%;
     }
     
-    .category-btn:hover {
+    .cat-item-btn:hover {
       background: rgba(255, 255, 255, 0.04);
       color: #fff;
     }
     
-    .category-btn.active {
+    .cat-item-btn.active {
       background: var(--accent-glow);
       color: var(--accent-light);
       font-weight: 600;
     }
     
-    .cat-badge {
+    .badge {
       font-size: 11px;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 10px;
       background: #09090c;
       color: var(--text-muted);
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--surface-border);
     }
     
-    .category-btn.active .cat-badge {
+    .cat-item-btn.active .badge {
       background: var(--accent);
       color: #fff;
       border-color: var(--accent);
     }
     
-    /* Feed Area */
-    .feed-container {
+    /* Feed */
+    .feed {
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
     
-    .filter-banner {
+    .filter-alert {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -232,7 +235,7 @@
       color: var(--accent-light);
     }
     
-    .clear-filter-btn {
+    .clear-btn {
       background: transparent;
       border: none;
       color: #fff;
@@ -241,55 +244,55 @@
       text-decoration: underline;
     }
     
-    /* Confession Card matching Option 5 Aesthetic */
+    /* Confession Card */
     .confession-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
       border-radius: 12px;
       padding: 20px;
       transition: border-color 0.2s;
     }
     
     .confession-card:hover {
-      border-color: var(--card-hover);
+      border-color: var(--surface-hover);
     }
     
-    .meta-line {
+    .card-meta-top {
       font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
     
-    .meta-num {
+    .card-num {
       color: #fff;
       font-weight: 600;
     }
     
-    .meta-tag {
+    .card-tag {
       color: var(--accent-light);
       background: var(--accent-glow);
-      padding: 1px 6px;
+      padding: 1px 7px;
       border-radius: 4px;
       font-size: 11px;
     }
     
-    .meta-author {
+    .card-author {
       font-size: 12.5px;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     
-    .meta-reply {
+    .card-reply {
       font-size: 12px;
       color: #74b9ff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     
-    .confession-body {
+    .card-body {
       font-size: 14.5px;
       line-height: 1.65;
       color: #dedee6;
@@ -300,22 +303,22 @@
     
     .card-divider {
       text-align: center;
-      color: #3e3e52;
+      color: #38384a;
       font-size: 13px;
       letter-spacing: 6px;
       margin-top: 14px;
     }
     
-    .loading, .empty-state {
+    .loading-state, .empty-state {
       text-align: center;
       padding: 60px 20px;
       color: var(--text-muted);
       font-size: 14px;
     }
     
-    /* Footer */
+    /* Universal Footer */
     footer {
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid var(--surface-border);
       padding: 24px;
       text-align: center;
       font-size: 12px;
@@ -327,126 +330,243 @@
       text-decoration: none;
     }
 
-    /* Responsive Design */
-    @media (max-width: 850px) {
-      .app-layout {
+    /* Helper visibility classes */
+    .mobile-only { display: none !important; }
+    .desktop-only { display: block !important; }
+
+    /* =======================================================
+       📱 MOBILE INTERFACE (Activated under 768px)
+       ======================================================= */
+    @media (max-width: 768px) {
+      .mobile-only { display: block !important; }
+      .desktop-only { display: none !important; }
+      
+      header {
+        padding: 10px 16px;
+      }
+      
+      .brand h1 {
+        font-size: 16px;
+      }
+      
+      .app-container {
         grid-template-columns: 1fr;
-        gap: 20px;
-        padding-top: 16px;
+        padding: 10px 12px 90px; /* Space for Mobile Floating Button */
+        gap: 12px;
+      }
+
+      /* Mobile Search Bar */
+      .mobile-search-wrapper {
+        padding: 4px 0 8px;
       }
       
-      .sidebar {
-        position: static;
-      }
-      
-      .category-list {
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        padding-bottom: 6px;
+      /* Mobile Horizontal Swipeable Category Bar */
+      .mobile-category-scroller {
+        display: flex !important;
         gap: 6px;
+        overflow-x: auto;
+        padding: 4px 0 10px;
+        scrollbar-width: none;
       }
       
-      .category-btn {
+      .mobile-category-scroller::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .pill-btn {
         flex-shrink: 0;
-        width: auto;
+        background: var(--surface);
+        border: 1px solid var(--surface-border);
+        color: var(--text);
         padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .pill-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* Mobile Stats Banner */
+      .mobile-stats-card {
         background: #09090c;
-        border: 1px solid var(--card-border);
+        border: 1px solid var(--surface-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11.5px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+      }
+
+      .mobile-stats-card strong {
+        color: var(--accent-light);
+      }
+      
+      .confession-card {
+        padding: 16px;
+        border-radius: 10px;
+      }
+
+      .card-body {
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      /* Mobile Floating Action Button (FAB) */
+      .mobile-fab {
+        display: flex !important;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 999;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 30px;
+        font-size: 13.5px;
+        font-weight: 700;
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.45);
+        align-items: center;
+        gap: 6px;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- UNIVERSAL HEADER -->
   <header>
     <div class="header-inner">
-      <div class="logo-area">
+      <div class="brand">
         <h1>🤫 BukanPASUM 26/27</h1>
         <p>Live Anonymous Confessions</p>
       </div>
-      <a href="https://tally.so/r/PdydpQ" class="submit-cta" target="_blank">
-        ✍️ Confess
+      <a href="https://tally.so/r/PdydpQ" class="btn-header desktop-only" target="_blank">
+        ✍️ Submit Confession
       </a>
     </div>
   </header>
 
-  <div class="app-layout">
+  <div class="app-container">
     
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar">
+    <!-- ============================================
+         🖥️ DESKTOP SIDEBAR
+         ============================================ -->
+    <aside class="desktop-sidebar desktop-only">
       
       <!-- Search Input -->
-      <div class="sidebar-widget">
+      <div class="widget">
         <input 
           type="text" 
-          id="search-input" 
+          id="search-desktop" 
           class="search-input" 
           placeholder="🔍 Search confessions..." 
           oninput="handleSearch(this.value)"
         >
       </div>
 
-      <!-- Live Stats -->
-      <div class="sidebar-widget">
+      <!-- Live Statistics Widget -->
+      <div class="widget">
         <div class="widget-title">Live Statistics</div>
         <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-value" id="stat-total">0</div>
-            <div class="stat-label">Confessions</div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-total">0</div>
+            <div class="stat-desc">Confessions</div>
           </div>
-          <div class="stat-item">
-            <div class="stat-value" id="stat-authors">0</div>
-            <div class="stat-label">Unique Names</div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-authors">0</div>
+            <div class="stat-desc">Unique Names</div>
           </div>
         </div>
         <div style="margin-top: 10px; font-size: 11.5px; color: var(--text-muted); text-align: center;">
-          Trending: <span id="stat-top-cat" style="color: #fff; font-weight: 600;">—</span>
+          Trending: <span id="stat-trending" style="color: #fff; font-weight: 600;">—</span>
         </div>
       </div>
 
-      <!-- Category Grouping -->
-      <div class="sidebar-widget">
+      <!-- Category Filter Tree -->
+      <div class="widget">
         <div class="widget-title">Categories</div>
-        <div class="category-list" id="category-list">
-          <button class="category-btn active" onclick="filterCategory('ALL')">
-            <span>🌐 All Confessions</span>
-            <span class="cat-badge" id="badge-ALL">0</span>
-          </button>
-          <!-- Category buttons dynamically inserted here -->
+        <div class="desktop-category-list" id="category-list-desktop">
+          <!-- Populated by JS -->
         </div>
       </div>
 
-      <!-- Links Widget -->
-      <div class="sidebar-widget" style="font-size: 12px; color: var(--text-muted);">
+      <!-- Community Links -->
+      <div class="widget" style="font-size: 12px; color: var(--text-muted);">
         <p>Official Channel: <a href="https://t.me/bukanpasumconfess" target="_blank" style="color: var(--accent-light);">@bukanpasumconfess</a></p>
       </div>
 
     </aside>
 
-    <!-- RIGHT FEED AREA -->
-    <main class="feed-container">
-      <div id="filter-banner" class="filter-banner" style="display: none;">
-        <span id="filter-banner-text">Showing: #Academic</span>
-        <button class="clear-filter-btn" onclick="filterCategory('ALL')">Clear filter</button>
+    <!-- ============================================
+         📱 + 🖥️ MAIN CONTENT & MOBILE INTERFACE
+         ============================================ -->
+    <main class="feed">
+      
+      <!-- MOBILE-ONLY: Search Bar -->
+      <div class="mobile-search-wrapper mobile-only">
+        <input 
+          type="text" 
+          id="search-mobile" 
+          class="search-input" 
+          placeholder="🔍 Search confessions..." 
+          oninput="handleSearch(this.value)"
+        >
       </div>
 
-      <div id="confessions-container">
-        <div class="loading">Loading latest confessions from database...</div>
+      <!-- MOBILE-ONLY: Mini Stats Card -->
+      <div class="mobile-stats-card mobile-only">
+        <div>Total: <strong id="m-stat-total">0</strong></div>
+        <div>Trending: <strong id="m-stat-trending">—</strong></div>
       </div>
+
+      <!-- MOBILE-ONLY: Horizontal Swipeable Category Bar -->
+      <div class="mobile-category-scroller mobile-only" id="category-list-mobile">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Active Filter Banner (Both Views) -->
+      <div id="filter-alert" class="filter-alert" style="display: none;">
+        <span id="filter-alert-text">Filtered by #Academic</span>
+        <button class="clear-btn" onclick="filterCategory('ALL')">Clear filter</button>
+      </div>
+
+      <!-- Live Stream -->
+      <div id="feed-stream">
+        <div class="loading-state">Loading latest confessions from database...</div>
+      </div>
+
     </main>
 
   </div>
 
+  <!-- MOBILE-ONLY: Floating "✍️ Confess" Action Button -->
+  <a href="https://tally.so/r/PdydpQ" class="mobile-fab mobile-only" target="_blank">
+    ✍️ Confess
+  </a>
+
+  <!-- UNIVERSAL FOOTER -->
   <footer>
     <p>BukanPASUM 26/27 · Unofficial Student Confessions Archive · <a href="https://tally.so/r/PdydpQ" target="_blank">Submit Yours</a></p>
   </footer>
 
+  <!-- ============================================
+       APPLICATION LOGIC & API SYNC
+       ============================================ -->
   <script>
-    // ============================================
-    // CONFIGURATION
-    // ============================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Web App URL
+    // Configuration
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Google Apps Script URL ending in /exec
     const TALLY_URL = "https://tally.so/r/PdydpQ";
 
     const CATEGORY_HASHTAGS = {
@@ -473,37 +593,37 @@
     }
 
     async function loadData() {
-      const container = document.getElementById('confessions-container');
+      const stream = document.getElementById('feed-stream');
       try {
         const response = await fetch(`${SCRIPT_URL}?action=getConfessions`);
         const data = await response.json();
 
         if (!Array.isArray(data) || data.length === 0) {
-          container.innerHTML = '<div class="empty-state">No confessions published yet.</div>';
+          stream.innerHTML = '<div class="empty-state">No confessions published yet.</div>';
           return;
         }
 
         allConfessions = data;
-        buildSidebarCategories();
+        buildCategories();
         updateStats();
-        renderFeed();
+        renderStream();
 
       } catch (err) {
         console.error(err);
-        container.innerHTML = `
+        stream.innerHTML = `
           <div class="empty-state">
-            <p>Unable to load confessions.</p>
+            <p>Unable to load confessions from database.</p>
             <p style="margin-top: 8px;"><a href="https://t.me/bukanpasumconfess" style="color: var(--accent-light);">View live on Telegram →</a></p>
           </div>
         `;
       }
     }
 
-    function buildSidebarCategories() {
-      const catListContainer = document.getElementById('category-list');
+    function buildCategories() {
+      const desktopList = document.getElementById('category-list-desktop');
+      const mobileList = document.getElementById('category-list-mobile');
+      
       const counts = { "ALL": allConfessions.length };
-
-      // Calculate counts per category
       Object.keys(CATEGORY_HASHTAGS).forEach(cat => counts[cat] = 0);
       
       allConfessions.forEach(item => {
@@ -513,34 +633,50 @@
         }
       });
 
-      document.getElementById('badge-ALL').innerText = counts["ALL"];
-
-      // Render buttons
-      let buttonsHtml = `
-        <button class="category-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
+      // 1. Render Desktop Sidebar Buttons
+      let dHtml = `
+        <button class="cat-item-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
           <span>🌐 All</span>
-          <span class="cat-badge">${counts["ALL"]}</span>
+          <span class="badge">${counts["ALL"]}</span>
         </button>
       `;
 
       Object.keys(CATEGORY_HASHTAGS).forEach(cat => {
         const tag = CATEGORY_HASHTAGS[cat];
         const isActive = activeCategory === cat ? 'active' : '';
-        buttonsHtml += `
-          <button class="category-btn ${isActive}" onclick="filterCategory('${escapeHtml(cat)}')">
+        dHtml += `
+          <button class="cat-item-btn ${isActive}" onclick="filterCategory('${escapeHtml(cat)}')">
             <span>${tag}</span>
-            <span class="cat-badge">${counts[cat] || 0}</span>
+            <span class="badge">${counts[cat] || 0}</span>
           </button>
         `;
       });
+      desktopList.innerHTML = dHtml;
 
-      catListContainer.innerHTML = buttonsHtml;
+      // 2. Render Mobile Swipeable Pills
+      let mHtml = `
+        <button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
+          🌐 All (${counts["ALL"]})
+        </button>
+      `;
+
+      Object.keys(CATEGORY_HASHTAGS).forEach(cat => {
+        const tag = CATEGORY_HASHTAGS[cat];
+        const isActive = activeCategory === cat ? 'active' : '';
+        mHtml += `
+          <button class="pill-btn ${isActive}" onclick="filterCategory('${escapeHtml(cat)}')">
+            ${tag} (${counts[cat] || 0})
+          </button>
+        `;
+      });
+      mobileList.innerHTML = mHtml;
     }
 
     function updateStats() {
-      document.getElementById('stat-total').innerText = allConfessions.length;
+      const total = allConfessions.length;
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('m-stat-total').innerText = total;
       
-      // Count unique usernames
       const authors = new Set();
       const catCounts = {};
 
@@ -556,7 +692,6 @@
 
       document.getElementById('stat-authors').innerText = authors.size;
 
-      // Find top category
       let topCat = "—";
       let topCount = 0;
       Object.keys(catCounts).forEach(c => {
@@ -566,40 +701,44 @@
         }
       });
 
-      document.getElementById('stat-top-cat').innerText = topCat;
+      document.getElementById('stat-trending').innerText = topCat;
+      document.getElementById('m-stat-trending').innerText = topCat;
     }
 
     function filterCategory(cat) {
       activeCategory = cat;
-      buildSidebarCategories();
+      buildCategories();
       
-      const banner = document.getElementById('filter-banner');
-      const bannerText = document.getElementById('filter-banner-text');
+      const alertBox = document.getElementById('filter-alert');
+      const alertText = document.getElementById('filter-alert-text');
       
       if (cat === "ALL") {
-        banner.style.display = 'none';
+        alertBox.style.display = 'none';
       } else {
-        banner.style.display = 'flex';
-        bannerText.innerText = `Filtered by ${CATEGORY_HASHTAGS[cat] || cat}`;
+        alertBox.style.display = 'flex';
+        alertText.innerText = `Showing ${CATEGORY_HASHTAGS[cat] || cat}`;
       }
 
-      renderFeed();
+      renderStream();
     }
 
     function handleSearch(query) {
       searchQuery = query.toLowerCase().trim();
-      renderFeed();
+      
+      // Sync search bars across views
+      document.getElementById('search-desktop').value = query;
+      document.getElementById('search-mobile').value = query;
+
+      renderStream();
     }
 
-    function renderFeed() {
-      const container = document.getElementById('confessions-container');
+    function renderStream() {
+      const stream = document.getElementById('feed-stream');
       
       const filtered = allConfessions.filter(item => {
-        // Category Filter
         const matchesCategory = (activeCategory === "ALL") || 
           (item.category && item.category.trim() === activeCategory);
 
-        // Search Query
         const matchesSearch = !searchQuery || 
           (item.confession && item.confession.toLowerCase().includes(searchQuery)) ||
           (item.username && item.username.toLowerCase().includes(searchQuery)) ||
@@ -609,7 +748,7 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state">No confessions match your filter or search query.</div>';
+        stream.innerHTML = '<div class="empty-state">No confessions match your filter or search query.</div>';
         return;
       }
 
@@ -619,23 +758,23 @@
         
         html += `
           <article class="confession-card">
-            <div class="meta-line">
-              <span class="meta-num">— confession no. ${escapeHtml(item.number)}</span>
-              ${tag ? `<span class="meta-tag">${escapeHtml(tag)}</span>` : ''}
+            <div class="card-meta-top">
+              <span class="card-num">— confession no. ${escapeHtml(item.number)}</span>
+              ${tag ? `<span class="card-tag">${escapeHtml(tag)}</span>` : ''}
             </div>
             
-            ${item.username && item.username.trim() ? `<div class="meta-author">— by ${escapeHtml(item.username.trim())}</div>` : ''}
+            ${item.username && item.username.trim() ? `<div class="card-author">— by ${escapeHtml(item.username.trim())}</div>` : ''}
             
-            ${item.replyTo && item.replyTo.trim() ? `<div class="meta-reply">— in reply to ${escapeHtml(item.replyTo.trim())}</div>` : ''}
+            ${item.replyTo && item.replyTo.trim() ? `<div class="card-reply">— in reply to ${escapeHtml(item.replyTo.trim())}</div>` : ''}
             
-            <div class="confession-body">${escapeHtml(item.confession)}</div>
+            <div class="card-body">${escapeHtml(item.confession)}</div>
             
             <div class="card-divider">·  ·  ·</div>
           </article>
         `;
       });
 
-      container.innerHTML = html;
+      stream.innerHTML = html;
     }
 
     loadData();
