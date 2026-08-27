@@ -18,7 +18,6 @@
       --accent: #6c5ce7;
       --accent-light: #a29bfe;
       --accent-glow: rgba(108, 92, 231, 0.15);
-      --danger: #ff7675;
       --card-divider: #262636;
     }
     
@@ -29,13 +28,12 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     /* =======================================================
-       DESKTOP & UNIVERSAL STYLES
+       HEADER (Universal)
        ======================================================= */
-    
-    /* Header */
     header {
       background: rgba(19, 19, 26, 0.85);
       backdrop-filter: blur(14px);
@@ -52,6 +50,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
     
     .brand h1 {
@@ -84,8 +88,22 @@
       background: #5b4bc4;
       transform: translateY(-1px);
     }
-    
-    /* Grid Layout */
+
+    /* Hamburger Menu Button */
+    .menu-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    /* =======================================================
+       MAIN APP GRID LAYOUT
+       ======================================================= */
     .app-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -97,14 +115,33 @@
       flex: 1;
     }
     
-    /* Desktop Sidebar */
-    .desktop-sidebar {
+    /* =======================================================
+       🖥️ DESKTOP SIDEBAR (Independently Scrollable)
+       ======================================================= */
+    .sidebar {
       position: sticky;
-      top: 85px;
-      height: fit-content;
+      top: 90px; /* Offset from header */
+      height: calc(100vh - 120px); /* Fills viewport height precisely */
+      overflow-y: auto; /* Independent sidebar scrolling */
+      padding-right: 6px;
       display: flex;
       flex-direction: column;
       gap: 18px;
+    }
+
+    /* Minimal Custom Scrollbar for Sidebar */
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--surface-border);
+      border-radius: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
     }
     
     .widget {
@@ -112,10 +149,11 @@
       border: 1px solid var(--surface-border);
       border-radius: 12px;
       padding: 16px;
+      width: 100%;
     }
     
     .widget-title {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
@@ -167,8 +205,8 @@
       margin-top: 2px;
     }
     
-    /* Category List (Desktop) */
-    .desktop-category-list {
+    /* Category List Buttons */
+    .category-list {
       display: flex;
       flex-direction: column;
       gap: 3px;
@@ -216,7 +254,9 @@
       border-color: var(--accent);
     }
     
-    /* Feed */
+    /* =======================================================
+       FEED & FLOW LAYOUT
+       ======================================================= */
     .feed {
       display: flex;
       flex-direction: column;
@@ -244,17 +284,16 @@
       text-decoration: underline;
     }
     
-    /* Confession Card */
+    /* Confession Card (Optimized Anti-Stretch) */
     .confession-card {
       background: var(--surface);
       border: 1px solid var(--surface-border);
       border-radius: 12px;
       padding: 20px;
-      transition: border-color 0.2s;
-    }
-    
-    .confession-card:hover {
-      border-color: var(--surface-hover);
+      width: 100%;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word; /* Absolutely prevents horizontal layout stretching */
     }
     
     .card-meta-top {
@@ -297,8 +336,6 @@
       line-height: 1.65;
       color: #dedee6;
       white-space: pre-wrap;
-      word-wrap: break-word;
-      margin: 14px 0;
     }
     
     .card-divider {
@@ -316,6 +353,19 @@
       font-size: 14px;
     }
     
+    /* Mobile Drawer Backdrop overlay */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 998;
+    }
+
     /* Universal Footer */
     footer {
       border-top: 1px solid var(--surface-border);
@@ -323,6 +373,7 @@
       text-align: center;
       font-size: 12px;
       color: var(--text-muted);
+      margin-top: auto;
     }
     
     footer a {
@@ -335,14 +386,18 @@
     .desktop-only { display: block !important; }
 
     /* =======================================================
-       📱 MOBILE INTERFACE (Activated under 768px)
+       📱 MOBILE INTERFACE (Collapsible Drawer Menu)
        ======================================================= */
     @media (max-width: 768px) {
       .mobile-only { display: block !important; }
       .desktop-only { display: none !important; }
       
+      .menu-toggle {
+        display: block !important;
+      }
+
       header {
-        padding: 10px 16px;
+        padding: 12px 16px;
       }
       
       .brand h1 {
@@ -351,65 +406,42 @@
       
       .app-container {
         grid-template-columns: 1fr;
-        padding: 10px 12px 90px; /* Space for Mobile Floating Button */
+        padding: 16px 12px 90px; /* Buffer for mobile Floating Action Button */
         gap: 12px;
       }
 
-      /* Mobile Search Bar */
-      .mobile-search-wrapper {
-        padding: 4px 0 8px;
-      }
-      
-      /* Mobile Horizontal Swipeable Category Bar */
-      .mobile-category-scroller {
-        display: flex !important;
-        gap: 6px;
-        overflow-x: auto;
-        padding: 4px 0 10px;
-        scrollbar-width: none;
-      }
-      
-      .mobile-category-scroller::-webkit-scrollbar {
-        display: none;
-      }
-      
-      .pill-btn {
-        flex-shrink: 0;
+      /* Sliding Sidebar Drawer menu */
+      .sidebar {
+        position: fixed !important;
+        top: 0;
+        left: -300px; /* Offscreen left */
+        width: 290px;
+        height: 100vh;
         background: var(--surface);
-        border: 1px solid var(--surface-border);
-        color: var(--text);
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        cursor: pointer;
+        border-right: 1px solid var(--surface-border);
+        z-index: 999;
+        transition: left 0.30s cubic-bezier(0.1, 0.9, 0.2, 1);
+        overflow-y: auto;
+        padding: 24px 16px;
         display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-      
-      .pill-btn.active {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #fff;
-        font-weight: 600;
+        flex-direction: column;
+        gap: 16px;
       }
 
-      /* Mobile Stats Banner */
-      .mobile-stats-card {
-        background: #09090c;
-        border: 1px solid var(--surface-border);
-        border-radius: 8px;
-        padding: 8px 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11.5px;
+      .sidebar.drawer-open {
+        left: 0 !important; /* Slide in */
+      }
+
+      .drawer-backdrop.drawer-open {
+        display: block !important;
+      }
+
+      .drawer-close-btn {
+        background: transparent;
+        border: none;
         color: var(--text-muted);
-        margin-bottom: 4px;
-      }
-
-      .mobile-stats-card strong {
-        color: var(--accent-light);
+        font-size: 20px;
+        cursor: pointer;
       }
       
       .confession-card {
@@ -418,8 +450,7 @@
       }
 
       .card-body {
-        font-size: 14px;
-        margin: 10px 0;
+        font-size: 14.5px;
       }
 
       /* Mobile Floating Action Button (FAB) */
@@ -428,11 +459,11 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        z-index: 999;
+        z-index: 90;
         background: var(--accent);
         color: #fff;
         text-decoration: none;
-        padding: 12px 20px;
+        padding: 12px 24px;
         border-radius: 30px;
         font-size: 13.5px;
         font-weight: 700;
@@ -445,12 +476,19 @@
 </head>
 <body>
 
+  <!-- MOBILE SIDEBAR BACKDROP OVERLAY -->
+  <div id="drawer-overlay" class="drawer-backdrop" onclick="toggleDrawer()"></div>
+
   <!-- UNIVERSAL HEADER -->
   <header>
     <div class="header-inner">
-      <div class="brand">
-        <h1>🤫 BukanPASUM 26/27</h1>
-        <p>Live Anonymous Confessions</p>
+      <div class="header-left">
+        <!-- Hamburger Menu Button visible only on mobile -->
+        <button class="menu-toggle mobile-only" onclick="toggleDrawer()">☰</button>
+        <div class="brand">
+          <h1>🤫 BukanPASUM 26/27</h1>
+          <p>Live Anonymous Confessions</p>
+        </div>
       </div>
       <a href="https://tally.so/r/PdydpQ" class="btn-header desktop-only" target="_blank">
         ✍️ Submit Confession
@@ -461,15 +499,21 @@
   <div class="app-container">
     
     <!-- ============================================
-         🖥️ DESKTOP SIDEBAR
+         🖥️ DESKTOP SIDEBAR / 📱 MOBILE DRAWER
          ============================================ -->
-    <aside class="desktop-sidebar desktop-only">
+    <aside id="app-sidebar" class="sidebar">
       
-      <!-- Search Input -->
+      <!-- Mobile-Only Header in Menu Drawer -->
+      <div class="widget-title mobile-only" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+        <span>Filter Menu</span>
+        <button class="drawer-close-btn" onclick="toggleDrawer()">✕</button>
+      </div>
+
+      <!-- Search Input Widget -->
       <div class="widget">
         <input 
           type="text" 
-          id="search-desktop" 
+          id="search-box" 
           class="search-input" 
           placeholder="🔍 Search confessions..." 
           oninput="handleSearch(this.value)"
@@ -497,7 +541,7 @@
       <!-- Category Filter Tree -->
       <div class="widget">
         <div class="widget-title">Categories</div>
-        <div class="desktop-category-list" id="category-list-desktop">
+        <div class="category-list" id="category-list-elements">
           <!-- Populated by JS -->
         </div>
       </div>
@@ -510,32 +554,10 @@
     </aside>
 
     <!-- ============================================
-         📱 + 🖥️ MAIN CONTENT & MOBILE INTERFACE
+         MAIN STREAM FEED
          ============================================ -->
     <main class="feed">
       
-      <!-- MOBILE-ONLY: Search Bar -->
-      <div class="mobile-search-wrapper mobile-only">
-        <input 
-          type="text" 
-          id="search-mobile" 
-          class="search-input" 
-          placeholder="🔍 Search confessions..." 
-          oninput="handleSearch(this.value)"
-        >
-      </div>
-
-      <!-- MOBILE-ONLY: Mini Stats Card -->
-      <div class="mobile-stats-card mobile-only">
-        <div>Total: <strong id="m-stat-total">0</strong></div>
-        <div>Trending: <strong id="m-stat-trending">—</strong></div>
-      </div>
-
-      <!-- MOBILE-ONLY: Horizontal Swipeable Category Bar -->
-      <div class="mobile-category-scroller mobile-only" id="category-list-mobile">
-        <!-- Populated by JS -->
-      </div>
-
       <!-- Active Filter Banner (Both Views) -->
       <div id="filter-alert" class="filter-alert" style="display: none;">
         <span id="filter-alert-text">Filtered by #Academic</span>
@@ -566,7 +588,7 @@
        ============================================ -->
   <script>
     // Configuration
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Google Apps Script URL ending in /exec
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Google Apps Script Web App URL ending in /exec
     const TALLY_URL = "https://tally.so/r/PdydpQ";
 
     const CATEGORY_HASHTAGS = {
@@ -590,6 +612,15 @@
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+    }
+
+    // Toggle Mobile Drawer menu
+    function toggleDrawer() {
+      const sidebar = document.getElementById('app-sidebar');
+      const overlay = document.getElementById('drawer-overlay');
+      
+      sidebar.classList.toggle('drawer-open');
+      overlay.classList.toggle('drawer-open');
     }
 
     async function loadData() {
@@ -620,8 +651,7 @@
     }
 
     function buildCategories() {
-      const desktopList = document.getElementById('category-list-desktop');
-      const mobileList = document.getElementById('category-list-mobile');
+      const listContainer = document.getElementById('category-list-elements');
       
       const counts = { "ALL": allConfessions.length };
       Object.keys(CATEGORY_HASHTAGS).forEach(cat => counts[cat] = 0);
@@ -633,7 +663,6 @@
         }
       });
 
-      // 1. Render Desktop Sidebar Buttons
       let dHtml = `
         <button class="cat-item-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
           <span>🌐 All</span>
@@ -651,31 +680,12 @@
           </button>
         `;
       });
-      desktopList.innerHTML = dHtml;
-
-      // 2. Render Mobile Swipeable Pills
-      let mHtml = `
-        <button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">
-          🌐 All (${counts["ALL"]})
-        </button>
-      `;
-
-      Object.keys(CATEGORY_HASHTAGS).forEach(cat => {
-        const tag = CATEGORY_HASHTAGS[cat];
-        const isActive = activeCategory === cat ? 'active' : '';
-        mHtml += `
-          <button class="pill-btn ${isActive}" onclick="filterCategory('${escapeHtml(cat)}')">
-            ${tag} (${counts[cat] || 0})
-          </button>
-        `;
-      });
-      mobileList.innerHTML = mHtml;
+      listContainer.innerHTML = dHtml;
     }
 
     function updateStats() {
       const total = allConfessions.length;
       document.getElementById('stat-total').innerText = total;
-      document.getElementById('m-stat-total').innerText = total;
       
       const authors = new Set();
       const catCounts = {};
@@ -702,7 +712,6 @@
       });
 
       document.getElementById('stat-trending').innerText = topCat;
-      document.getElementById('m-stat-trending').innerText = topCat;
     }
 
     function filterCategory(cat) {
@@ -719,16 +728,19 @@
         alertText.innerText = `Showing ${CATEGORY_HASHTAGS[cat] || cat}`;
       }
 
+      // Automatically close drawer on mobile after clicking category
+      const sidebar = document.getElementById('app-sidebar');
+      const overlay = document.getElementById('drawer-overlay');
+      if (sidebar.classList.contains('drawer-open')) {
+        sidebar.classList.remove('drawer-open');
+        overlay.classList.remove('drawer-open');
+      }
+
       renderStream();
     }
 
     function handleSearch(query) {
       searchQuery = query.toLowerCase().trim();
-      
-      // Sync search bars across views
-      document.getElementById('search-desktop').value = query;
-      document.getElementById('search-mobile').value = query;
-
       renderStream();
     }
 
