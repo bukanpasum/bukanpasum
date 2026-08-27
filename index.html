@@ -120,9 +120,9 @@
        ======================================================= */
     .sidebar {
       position: sticky;
-      top: 90px; /* Offset from header */
-      height: calc(100vh - 120px); /* Fills viewport height precisely */
-      overflow-y: auto; /* Independent sidebar scrolling */
+      top: 90px;
+      height: calc(100vh - 120px);
+      overflow-y: auto;
       padding-right: 6px;
       display: flex;
       flex-direction: column;
@@ -255,12 +255,12 @@
     }
     
     /* =======================================================
-       FEED & FLOW LAYOUT
+       FEED & FLOW LAYOUT (Beautifully Spaced)
        ======================================================= */
     .feed {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 28px; /* Increased from 16px → 28px for airy visual spacing */
     }
     
     .filter-alert {
@@ -284,22 +284,30 @@
       text-decoration: underline;
     }
     
-    /* Confession Card (Optimized Anti-Stretch) */
+    /* Confession Card (Elevated & Spacious) */
     .confession-card {
       background: var(--surface);
       border: 1px solid var(--surface-border);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 24px;
       width: 100%;
       word-wrap: break-word;
       word-break: break-word;
-      overflow-wrap: break-word; /* Absolutely prevents horizontal layout stretching */
+      overflow-wrap: break-word;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    
+    .confession-card:hover {
+      border-color: var(--surface-border);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
     }
     
     .card-meta-top {
       font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -322,13 +330,13 @@
     .card-author {
       font-size: 12.5px;
       color: var(--text-muted);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     
     .card-reply {
       font-size: 12px;
       color: #74b9ff;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
     
     .card-body {
@@ -343,7 +351,7 @@
       color: #38384a;
       font-size: 13px;
       letter-spacing: 6px;
-      margin-top: 14px;
+      margin-top: 18px;
     }
     
     .loading-state, .empty-state {
@@ -406,15 +414,15 @@
       
       .app-container {
         grid-template-columns: 1fr;
-        padding: 16px 12px 90px; /* Buffer for mobile Floating Action Button */
-        gap: 12px;
+        padding: 16px 12px 90px;
+        gap: 24px; /* Comfortable gap on mobile too */
       }
 
       /* Sliding Sidebar Drawer menu */
       .sidebar {
         position: fixed !important;
         top: 0;
-        left: -300px; /* Offscreen left */
+        left: -300px;
         width: 290px;
         height: 100vh;
         background: var(--surface);
@@ -429,7 +437,7 @@
       }
 
       .sidebar.drawer-open {
-        left: 0 !important; /* Slide in */
+        left: 0 !important;
       }
 
       .drawer-backdrop.drawer-open {
@@ -445,7 +453,7 @@
       }
       
       .confession-card {
-        padding: 16px;
+        padding: 18px; /* Slightly tighter padding for mobile screens */
         border-radius: 10px;
       }
 
@@ -483,7 +491,6 @@
   <header>
     <div class="header-inner">
       <div class="header-left">
-        <!-- Hamburger Menu Button visible only on mobile -->
         <button class="menu-toggle mobile-only" onclick="toggleDrawer()">☰</button>
         <div class="brand">
           <h1>🤫 BukanPASUM 26/27</h1>
@@ -558,7 +565,7 @@
          ============================================ -->
     <main class="feed">
       
-      <!-- Active Filter Banner (Both Views) -->
+      <!-- Active Filter Banner -->
       <div id="filter-alert" class="filter-alert" style="display: none;">
         <span id="filter-alert-text">Filtered by #Academic</span>
         <button class="clear-btn" onclick="filterCategory('ALL')">Clear filter</button>
@@ -588,7 +595,7 @@
        ============================================ -->
   <script>
     // Configuration
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec"; // Your Google Apps Script Web App URL ending in /exec
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMcnsFT83CcKr8ovZCbgYdv3QIsTMEU9NlmHxKmc7-jP53cFcvj2ny1ucr7ute8Bo/exec";
     const TALLY_URL = "https://tally.so/r/PdydpQ";
 
     const CATEGORY_HASHTAGS = {
@@ -728,7 +735,7 @@
         alertText.innerText = `Showing ${CATEGORY_HASHTAGS[cat] || cat}`;
       }
 
-      // Automatically close drawer on mobile after clicking category
+      // Auto-close drawer on mobile after tapping a category
       const sidebar = document.getElementById('app-sidebar');
       const overlay = document.getElementById('drawer-overlay');
       if (sidebar.classList.contains('drawer-open')) {
@@ -766,7 +773,7 @@
 
       let html = '';
       filtered.forEach(item => {
-        const tag = item.category ? (CATEGORY_HASHTAGS[item.category.trim()] || `#${item.category.replace(/\\s+/g, '')}`) : '';
+        const tag = item.category ? (CATEGORY_HASHTAGS[item.category.trim()] || `#${item.category.replace(/\s+/g, '')}`) : '';
         
         html += `
           <article class="confession-card">
