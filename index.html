@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BukanPASUM 26/27 Confessions</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #0f0f12;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: linear-gradient(180deg, #181824 0%, #0f0f12 100%);
+      padding: 40px 20px 30px;
+      text-align: center;
+      border-bottom: 1px solid #232332;
+    }
+    
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    
+    .header p {
+      color: #8e8ea0;
+      font-size: 14px;
+    }
+    
+    .header .submit-btn {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 10px 22px;
+      background: #6c5ce7;
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(108, 92, 231, 0.35);
+    }
+    
+    .header .submit-btn:hover {
+      background: #5a4bd1;
+      transform: translateY(-1px);
+    }
+    
+    .container {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    
+    .confession-card {
+      background: #16161e;
+      border: 1px solid #262636;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+    
+    .meta-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .confession-no {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    
+    .category-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a29bfe;
+      background: rgba(108, 92, 231, 0.15);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    
+    .author-line {
+      font-size: 13px;
+      color: #9e9eb3;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+    
+    .reply-line {
+      font-size: 12px;
+      color: #74b9ff;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    
+    blockquote {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #6c5ce7;
+      margin: 12px 0 16px 0;
+      padding: 10px 14px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #dddddd;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .divider {
+      text-align: center;
+      color: #353545;
+      font-size: 13px;
+      letter-spacing: 6px;
+    }
+    
+    .loading, .error {
+      text-align: center;
+      padding: 50px 20px;
+      color: #7a7a8c;
+      font-size: 14px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 30px 20px 40px;
+      color: #555566;
+      font-size: 12px;
+    }
+    
+    .footer a {
+      color: #8e8ea0;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      color: #a29bfe;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🤫 BukanPASUM 26/27</h1>
+    <p>Anonymous Confessions Channel</p>
+    <a href="https://tally.so/r/PdydpQ" class="submit-btn" target="_blank">✍️ Submit Confession</a>
+  </div>
+  
+  <div class="container" id="confessions-container">
+    <div class="loading">Loading latest confessions...</div>
+  </div>
+  
+  <div class="footer">
+    <p><a href="https://t.me/bukanpasumconfess" target="_blank">Telegram Channel</a> · <a href="https://tally.so/r/PdydpQ" target="_blank">Submit</a></p>
+  </div>
+
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    // Paste your Google Apps Script Web App URL here:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyG0igS2Pl17t8sB8Ic3btUAtq8ZizmmCFPH49BTMU1ZevV-vptUT7Gm3f28ik9A4m7/exec";
+    
+    const CATEGORY_HASHTAGS = {
+      "Academic": "#Academic",
+      "Love & Crush": "#LoveCrush",
+      "Drama & Tea": "#DramaTea",
+      "Vent & Rant": "#VentRant",
+      "Funny & Random": "#FunnyRandom",
+      "Kolek Life": "#KolekLife",
+      "Food & Cafe": "#FoodCafe",
+      "Deep & Serious": "#DeepSerious"
+    };
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    async function loadConfessions() {
+      const container = document.getElementById('confessions-container');
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getConfessions`);
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = '<div class="loading">No confessions posted yet!</div>';
+          return;
+        }
+        
+        container.innerHTML = '';
+        
+        data.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'confession-card';
+          
+          let tagText = item.category ? (CATEGORY_HASHTAGS[item.category.trim()] || `#${item.category.replace(/\\s+/g, '')}`) : '';
+          
+          let html = `
+            <div class="meta-line">
+              <span class="confession-no">— confession no. ${escapeHtml(item.number)}</span>
+              ${tagText ? `<span class="category-tag">${escapeHtml(tagText)}</span>` : ''}
+            </div>
+          `;
+          
+          if (item.username && item.username.trim() !== '') {
+            html += `<div class="author-line">✍️ by ${escapeHtml(item.username.trim())}</div>`;
+          }
+          
+          if (item.replyTo && item.replyTo.trim() !== '') {
+            let cleanReply = item.replyTo.trim().replace(/^#\\s*/, '');
+            if (/^\\d+$/.test(cleanReply)) cleanReply = '#' + cleanReply;
+            html += `<div class="reply-line">↳ in reply to ${escapeHtml(cleanReply)}</div>`;
+          }
+          
+          html += `
+            <blockquote>${escapeHtml(item.confession)}</blockquote>
+            <div class="divider">·  ·  ·</div>
+          `;
+          
+          card.innerHTML = html;
+          container.appendChild(card);
+        });
+        
+      } catch (err) {
+        console.error("Fetch error:", err);
+        container.innerHTML = `
+          <div class="error">
+            <p>Unable to load confessions from database.</p>
+            <p style="margin-top: 10px;"><a href="https://t.me/s/bukanpasumconfess" style="color:#a29bfe;">View on Telegram instead →</a></p>
+          </div>
+        `;
+      }
+    }
+    
+    loadConfessions();
+  </script>
+</body>
+</html>
