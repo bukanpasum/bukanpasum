@@ -345,7 +345,12 @@
     .feed {
       display: flex;
       flex-direction: column;
-      gap: 40px; /* generous breathing room between confession cards */
+      /* no gap here on purpose — the hairline border-bottom on each .post
+         is what separates entries now, timeline-style */
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 4px 16px;
     }
 
     .feed-header {
@@ -389,91 +394,137 @@
       text-decoration: underline;
     }
     
-    /* Confession Card (Elevated & Spacious) */
-    .confession-card {
+    /* =======================================================
+       TIMELINE POST (Threads / X-style row, no card chrome)
+       ======================================================= */
+    .post {
       position: relative;
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-left: 3px solid var(--card-accent, var(--accent));
-      border-radius: 14px;
-      padding: 26px 26px 22px 24px;
+      display: flex;
+      gap: 14px;
       width: 100%;
+      padding: 18px 6px;
+      border-bottom: 1px solid var(--card-divider);
       word-wrap: break-word;
       word-break: break-word;
       overflow-wrap: break-word;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
       opacity: 0;
-      transform: translateY(10px);
-      animation: card-in 0.45s ease forwards;
+      transform: translateY(6px);
+      animation: post-in 0.4s ease forwards;
+      border-radius: 10px;
+      transition: background 0.15s ease;
     }
 
-    @keyframes card-in {
+    .post:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .feed > .post:last-child {
+      border-bottom: none;
+    }
+
+    @keyframes post-in {
       to { opacity: 1; transform: translateY(0); }
     }
-    
-    .confession-card:hover {
-      border-color: var(--surface-border);
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
-    }
-    
-    .card-meta-top {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
+
+    .post-avatar {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    
-    .card-num {
-      color: #fff;
-      font-weight: 600;
-    }
-    
-    .card-tag {
-      color: var(--accent-light);
-      background: var(--accent-glow);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0b0b0e;
+      background: linear-gradient(155deg, var(--card-accent, var(--accent)), color-mix(in srgb, var(--card-accent, var(--accent)) 55%, #0b0b0e));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
     }
 
-    .card-meta-bottom {
+    .post-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .post-head {
       display: flex;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 6px 14px;
-      margin-bottom: 14px;
+      gap: 6px 8px;
+      font-size: 13.5px;
+      margin-bottom: 2px;
     }
-    
-    .card-author {
-      font-size: 12.5px;
+
+    .post-name {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .post-num {
       color: var(--text-muted);
+      font-size: 12.5px;
     }
-    
-    .card-reply {
+
+    .post-cat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       font-size: 12px;
-      color: #74b9ff;
+      font-weight: 600;
+      color: var(--card-accent, var(--accent-light));
+      margin-left: auto;
     }
-    
-    .card-body {
+
+    .post-cat::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--card-accent, var(--accent));
+      flex-shrink: 0;
+    }
+
+    /* Quoted reply block — replaces the old raw-dumped duplicate text */
+    .post-quote {
+      margin: 8px 0 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-left: 2px solid var(--quote-accent, var(--accent));
+    }
+
+    .post-quote-meta {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .post-quote-meta b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .post-quote-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-body {
       font-size: 15px;
-      line-height: 1.75;
+      line-height: 1.7;
       color: #dedee6;
       white-space: pre-wrap;
       letter-spacing: 0.1px;
-    }
-    
-    .card-divider {
-      text-align: center;
-      color: #38384a;
-      font-size: 13px;
-      letter-spacing: 6px;
-      margin-top: 20px;
     }
     
     .loading-state, .empty-state {
@@ -481,9 +532,6 @@
       padding: 70px 20px;
       color: var(--text-muted);
       font-size: 14px;
-      background: var(--surface);
-      border: 1px dashed var(--surface-border);
-      border-radius: 14px;
     }
 
     .loading-state .spinner {
@@ -591,14 +639,25 @@
         cursor: pointer;
       }
       
-      .confession-card {
-        padding: 20px 18px 18px 16px;
-        border-radius: 10px;
+      .feed {
+        padding: 2px 10px;
+        border-radius: 12px;
       }
 
-      .card-body {
+      .post {
+        padding: 15px 2px;
+        gap: 10px;
+      }
+
+      .post-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+      }
+
+      .post-body {
         font-size: 14.5px;
-        line-height: 1.7;
+        line-height: 1.65;
       }
 
       /* Mobile Floating Action Button (FAB) */
@@ -622,7 +681,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .confession-card { animation: none; opacity: 1; transform: none; }
+      .post { animation: none; opacity: 1; transform: none; }
       .live-dot { animation: none; }
       html { scroll-behavior: auto; }
     }
@@ -775,9 +834,46 @@
       "Deep & Serious": "var(--c-deep)"
     };
 
+    // reverse lookup: "#VentRant" -> "Vent & Rant", used to color quoted replies correctly
+    const HASHTAG_TO_CATEGORY = {};
+    Object.entries(CATEGORY_HASHTAGS).forEach(([cat, tag]) => { HASHTAG_TO_CATEGORY[tag] = cat; });
+
     let allConfessions = [];
     let activeCategory = "ALL";
     let searchQuery = "";
+
+    // The sheet stores replyTo as a raw dump of the quoted confession's own
+    // rendered text (its header line + author line + body). Rather than
+    // showing that raw dump verbatim (which duplicated headers on-screen),
+    // pull out just the number / tag / author / body so it can render as a
+    // clean quoted block, like a quote-post.
+    function parseReplyQuote(raw) {
+      if (!raw || !raw.trim()) return null;
+      const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+      let number = null, tag = null, author = null;
+      const bodyLines = [];
+
+      lines.forEach(line => {
+        const noMatch = line.match(/no\.\s*(\d+)/i);
+        const tagMatch = line.match(/#(\w+)/);
+        const byMatch = line.match(/by\s+(.+)$/i);
+        const isDivider = /^[·.\s]+$/.test(line);
+
+        if (noMatch) number = noMatch[1];
+        if (tagMatch) tag = '#' + tagMatch[1];
+        if (byMatch) { author = byMatch[1].trim(); return; }
+        if (noMatch || tagMatch || isDivider) return;
+        bodyLines.push(line);
+      });
+
+      const body = bodyLines.join(' ').trim();
+      return { number, tag, author, body: body || raw.trim() };
+    }
+
+    function initialFor(name) {
+      const clean = (name || '').trim();
+      return clean ? clean.charAt(0).toUpperCase() : '🤫';
+    }
 
     function escapeHtml(text) {
       if (!text) return "";
@@ -947,23 +1043,36 @@
         const catKey = item.category ? item.category.trim() : null;
         const tag = catKey ? (CATEGORY_HASHTAGS[catKey] || `#${item.category.replace(/\s+/g, '')}`) : '';
         const accent = catKey ? (CATEGORY_ACCENTS[catKey] || 'var(--accent)') : 'var(--accent)';
-        const delay = Math.min(i * 0.05, 0.4);
-        
-        html += `
-          <article class="confession-card" style="--card-accent: ${accent}; animation-delay: ${delay}s;">
-            <div class="card-meta-top">
-              <span class="card-num">— confession no. ${escapeHtml(item.number)}</span>
-              ${tag ? `<span class="card-tag">${escapeHtml(tag)}</span>` : ''}
-            </div>
+        const name = item.username && item.username.trim() ? item.username.trim() : 'Anonymous';
+        const delay = Math.min(i * 0.04, 0.3);
 
-            <div class="card-meta-bottom">
-              ${item.username && item.username.trim() ? `<div class="card-author">— by ${escapeHtml(item.username.trim())}</div>` : ''}
-              ${item.replyTo && item.replyTo.trim() ? `<div class="card-reply">— in reply to ${escapeHtml(item.replyTo.trim())}</div>` : ''}
+        const quote = item.replyTo ? parseReplyQuote(item.replyTo) : null;
+        const quoteCat = quote && quote.tag ? HASHTAG_TO_CATEGORY[quote.tag] : null;
+        const quoteAccent = quoteCat ? (CATEGORY_ACCENTS[quoteCat] || 'var(--accent)') : 'var(--accent)';
+
+        const quoteHtml = quote ? `
+          <div class="post-quote" style="--quote-accent: ${quoteAccent};">
+            <div class="post-quote-meta">
+              ${quote.number ? `<span>#${escapeHtml(quote.number)}</span>` : ''}
+              ${quote.author ? `<b>${escapeHtml(quote.author)}</b>` : ''}
+              ${quote.tag ? `<span>${escapeHtml(quote.tag)}</span>` : ''}
             </div>
-            
-            <div class="card-body">${escapeHtml(item.confession)}</div>
-            
-            <div class="card-divider">·  ·  ·</div>
+            <div class="post-quote-body">${escapeHtml(quote.body)}</div>
+          </div>
+        ` : '';
+
+        html += `
+          <article class="post" style="--card-accent: ${accent}; animation-delay: ${delay}s;">
+            <div class="post-avatar">${initialFor(item.username)}</div>
+            <div class="post-main">
+              <div class="post-head">
+                <span class="post-name">${escapeHtml(name)}</span>
+                <span class="post-num">#${escapeHtml(item.number)}</span>
+                ${tag ? `<span class="post-cat">${escapeHtml(tag)}</span>` : ''}
+              </div>
+              ${quoteHtml}
+              <div class="post-body">${escapeHtml(item.confession)}</div>
+            </div>
           </article>
         `;
       });
